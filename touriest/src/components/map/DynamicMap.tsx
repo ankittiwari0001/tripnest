@@ -23,6 +23,9 @@ import PlaceDrawer from "./PlaceDrawer";
 import SavedPlacesPanel from "./SavedPanel";
 import MapFilters from "./MapFilters";
 import MapSearch from "./MapSearch";
+import MapLoading from "./MapLoading";
+import MapError from "./MapError";
+import MapEmpty from "./MapEmpty";
 
 import useSavedPlaces
 from "@/hooks/useSavedPlaces";
@@ -76,6 +79,8 @@ export default function DynamicMap() {
 
   const {
     places,
+    loading,
+    error,
   } = useMapPlaces({
 
     lat:
@@ -331,7 +336,7 @@ export default function DynamicMap() {
       markersRef.current = [];
     };
 
-  }, []);
+  }, [userLocation.lat, userLocation.lng]);
 
   /* UPDATE MAP CENTER */
 
@@ -463,6 +468,31 @@ export default function DynamicMap() {
           toggleSavePlace
         }
       />
+
+       {loading && (
+
+   <MapLoading />
+       
+       )}
+
+      {error && (
+
+    <MapError
+
+      message={error}
+
+     onRetry={() =>
+        window.location.reload()
+       }
+     />
+   )} 
+   
+     {!loading &&
+           !error &&
+       places.length === 0 && (
+        <MapEmpty />
+      )}
+
 
       {/* PLACE DRAWER */}
 

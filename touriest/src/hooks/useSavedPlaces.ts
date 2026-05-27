@@ -9,6 +9,10 @@ import type {
   ExtendedPlace,
 } from "@/types/place";
 
+import {
+  toast,
+} from "sonner";
+
 export default function useSavedPlaces() {
 
   /* INITIAL STATE */
@@ -59,6 +63,7 @@ export default function useSavedPlaces() {
     try {
 
       window.localStorage.setItem(
+
         "savedPlaces",
 
         JSON.stringify(
@@ -95,6 +100,10 @@ export default function useSavedPlaces() {
 
         if (exists) {
 
+          toast.success(
+            "Removed from saved places"
+          );
+
           return prev.filter(
             (p) =>
               p.id !== place.id
@@ -102,6 +111,10 @@ export default function useSavedPlaces() {
         }
 
         /* ADD */
+
+        toast.success(
+          "Place saved successfully ❤️"
+        );
 
         return [
           ...prev,

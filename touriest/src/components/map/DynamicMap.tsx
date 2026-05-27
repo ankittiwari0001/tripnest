@@ -4,6 +4,7 @@ import {
   useEffect,
   useState,
   useRef,
+  useCallback,
 } from "react";
 
 import type {
@@ -150,9 +151,12 @@ export default function DynamicMap() {
 
   useEffect(() => {
 
+    let isMounted = true;
+
     async function initMap() {
 
       if (
+        !isMounted ||
         mapRef.current
       ) {
         return;
@@ -166,12 +170,16 @@ export default function DynamicMap() {
       const L =
         leaflet.default;
 
+      if (!isMounted) {
+        return;
+      }
+
       const container =
         document.getElementById(
           "map"
         );
 
-      if (!container) {
+      if (!container || !isMounted) {
         return;
       }
 
@@ -194,7 +202,7 @@ export default function DynamicMap() {
         )._leaflet_id = undefined;
       }
 
-      /* CREATE MAP */
+      /* CREATE MAP WITH CURRENT LOCATION */
 
       const map =
         L.map(
@@ -204,11 +212,16 @@ export default function DynamicMap() {
           }
         ).setView(
           [
-            userLocation.lat,
-            userLocation.lng,
+            23.2599,
+            77.4126,
           ],
           15
         );
+
+      if (!isMounted) {
+        map.remove();
+        return;
+      }
 
       mapRef.current =
         map;
@@ -250,8 +263,8 @@ export default function DynamicMap() {
 
       L.marker(
         [
-          userLocation.lat,
-          userLocation.lng,
+          23.2599,
+          77.4126,
         ],
         {
           icon: userIcon,
@@ -269,11 +282,12 @@ export default function DynamicMap() {
         () => {
 
           if (
+            !isMounted ||
             debounceRef.current
           ) {
 
             window.clearTimeout(
-              debounceRef.current
+              debounceRef.current!
             );
           }
 
@@ -282,6 +296,7 @@ export default function DynamicMap() {
               () => {
 
                 if (
+                  !isMounted ||
                   !mapRef.current
                 ) {
                   return;
@@ -310,6 +325,8 @@ export default function DynamicMap() {
 
     return () => {
 
+      isMounted = false;
+
       /* CLEAR TIMEOUT */
 
       if (
@@ -336,7 +353,7 @@ export default function DynamicMap() {
       markersRef.current = [];
     };
 
-  }, [userLocation.lat, userLocation.lng]);
+  }, []);
 
   /* UPDATE MAP CENTER */
 
@@ -354,17 +371,23 @@ export default function DynamicMap() {
     const center =
       map.getCenter();
 
-    if (
-
+    const latDiff =
       Math.abs(
         center.lat -
         userLocation.lat
-      ) > 0.0001 ||
+      );
 
+    const lngDiff =
       Math.abs(
         center.lng -
         userLocation.lng
-      ) > 0.0001
+      );
+
+    /* ONLY PAN IF SIGNIFICANTLY DIFFERENT */
+
+    if (
+      latDiff > 0.01 ||
+      lngDiff > 0.01
     ) {
 
       map.setView(
@@ -372,11 +395,24 @@ export default function DynamicMap() {
           userLocation.lat,
           userLocation.lng,
         ],
-        map.getZoom()
+        map.getZoom(),
+        {
+          animate: true,
+          duration: 0.5,
+        }
       );
     }
 
   }, [userLocation]);
+
+  /* HANDLE SELECT PLACE */
+
+  const handleSelectPlace = useCallback(
+    (place: ExtendedPlace) => {
+      setSelectedPlace(place);
+    },
+    []
+  );
 
   /* MARKERS */
 
@@ -389,7 +425,7 @@ export default function DynamicMap() {
     places,
 
     onSelectPlace:
-      setSelectedPlace,
+      handleSelectPlace,
   });
 
   return (
@@ -486,7 +522,7 @@ export default function DynamicMap() {
        }
      />
    )} 
-   
+
      {!loading &&
            !error &&
        places.length === 0 && (

@@ -56,7 +56,7 @@ export default function PlaceDrawer({
 
     <div className="fixed inset-0 z-[9999] bg-black/40 backdrop-blur-sm flex justify-end">
 
-      <div className="w-full max-w-md h-screen bg-white shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-500">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-[500px] bg-white z-[9999] shadow-2xl overflow-y-auto animate-in slide-in-from-right duration-500">
 
         {/* IMAGE */}
 

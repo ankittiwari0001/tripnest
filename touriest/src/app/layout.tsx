@@ -1,8 +1,10 @@
 import "./globals.css";
 
-import { Toaster } from "react-hot-toast";
 import "leaflet/dist/leaflet.css";
 import Navbar from "@/components/layout/Navbar";
+import {
+  Toaster,
+} from "sonner";
 
 export default function RootLayout({
   children,
@@ -21,10 +23,8 @@ export default function RootLayout({
         {/* PAGE CONTENT */}
         {children}
 
-        {/* TOAST */}
-        <Toaster
-          position="top-right"
-        />
+        {/* TOAST (sonner) */}
+        <Toaster position="top-center" richColors closeButton />
 
       </body>
 

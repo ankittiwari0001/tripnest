@@ -3,14 +3,13 @@
 import {
   useEffect,
   RefObject,
+  useCallback,
 } from "react";
 
 import type {
   Map as LeafletMap,
   Marker,
 } from "leaflet";
-
-import type * as Leaflet from "leaflet";
 
 import type {
   ExtendedPlace,
@@ -36,6 +35,15 @@ interface Props {
   ) => void;
 }
 
+function isMarkerClusterGroup(layer: unknown): layer is { addLayer: (...args: unknown[]) => unknown } {
+  return (
+    typeof layer === "object" &&
+    layer !== null &&
+    "addLayer" in layer &&
+    typeof (layer as { addLayer: unknown }).addLayer === "function"
+  );
+}
+
 export default function useLeafletMarkers({
 
   mapRef,
@@ -47,51 +55,42 @@ export default function useLeafletMarkers({
   onSelectPlace,
 }: Props) {
 
+  const handleSelectPlace = useCallback(
+    (place: ExtendedPlace) => {
+      onSelectPlace(place);
+    },
+    [onSelectPlace]
+  );
+
   useEffect(() => {
 
+    const map = mapRef.current;
+
+    if (!map) {
+      return;
+    }
+
     async function renderMarkers() {
-
-      const map =
-        mapRef.current;
-
-      if (!map) {
-        return;
-      }
-
       try {
+        const leaflet = await import("leaflet");
+        await import("leaflet.markercluster");
+        const L = leaflet.default;
 
-        /* IMPORT LEAFLET */
+        const currentMap = mapRef.current;
 
-        const leaflet =
-          await import(
-            "leaflet"
-          );
+        if (!currentMap) {
+          return;
+        }
 
-        const L =
-          leaflet.default;
+        /* REMOVE OLD CLUSTERS */
 
-        /* REMOVE OLD */
-
-        markersRef.current.forEach(
-          (marker) => {
-
-            try {
-
-              map.removeLayer(
-                marker
-              );
-
-            } catch (error) {
-
-              console.error(
-                "Marker remove error:",
-                error
-              );
-            }
+        currentMap.eachLayer((layer) => {
+          if (isMarkerClusterGroup(layer)) {
+            currentMap.removeLayer(
+              layer
+            );
           }
-        );
-
-        markersRef.current = [];
+        });
 
         /* NO PLACES */
 
@@ -99,86 +98,112 @@ export default function useLeafletMarkers({
           places.length === 0
         ) {
 
+          markersRef.current = [];
+
           return;
         }
+
+        markersRef.current = [];
+
+        /* CREATE CLUSTER */
+
+        const clusterGroup =
+          L.markerClusterGroup({
+
+            spiderfyOnMaxZoom: true,
+
+            showCoverageOnHover: false,
+
+            zoomToBoundsOnClick: true,
+          });
 
         /* BOUNDS */
 
         const bounds:
-          Leaflet.LatLngExpression[] = [];
+          L.LatLngExpression[] = [];
 
         /* ADD MARKERS */
 
-        for (const place of places) {
+        places.forEach(
+          (place) => {
 
-          try {
+            try {
 
-            if (
+              if (
 
-              typeof place.lat !==
-                "number" ||
+                typeof place.lat !==
+                  "number" ||
 
-              typeof place.lon !==
-                "number"
-            ) {
+                typeof place.lon !==
+                  "number"
+              ) {
 
-              continue;
-            }
+                return;
+              }
 
-            const type =
+              const type =
 
-              place.tags
-                .tourism ||
+                place.tags
+                  .tourism ||
 
-              place.tags
-                .amenity ||
+                place.tags
+                  .amenity ||
 
-              "";
+                "";
 
-            const spec =
-              createMarkerIcon(type);
+              const markerIcon =
+                createMarkerIcon(
+                  type
+                );
 
-            const marker =
-              L.marker(
-                [
-                  place.lat,
-                  place.lon,
-                ],
-                {
-                  icon:
-                    L.divIcon(spec),
-                }
-              )
-
-                .addTo(map)
-
-                .on(
+              const marker =
+                L.marker(
+                  [
+                    place.lat,
+                    place.lon,
+                  ],
+                  {
+                    icon:
+                      markerIcon,
+                  }
+                ).on(
                   "click",
                   () => {
 
-                    onSelectPlace(
+                    handleSelectPlace(
                       place
                     );
                   }
                 );
 
-            markersRef.current.push(
-              marker
-            );
+              markersRef.current.push(marker);
 
-            bounds.push([
-              place.lat,
-              place.lon,
-            ]);
+              /* ADD TO CLUSTER */
 
-          } catch (error) {
+              clusterGroup.addLayer(
+                marker
+              );
 
-            console.error(
-              "Marker render error:",
-              error
-            );
+              bounds.push([
+                place.lat,
+                place.lon,
+              ]);
+
+            } catch (error) {
+
+              console.error(
+                "Marker render error:",
+                error
+              );
+            }
           }
-        }
+        );
+
+        /* ADD CLUSTER TO MAP */
+
+        currentMap.addLayer(
+          clusterGroup
+        );
 
         /* FIT BOUNDS */
 
@@ -186,7 +211,7 @@ export default function useLeafletMarkers({
           bounds.length > 0
         ) {
 
-          map.fitBounds(
+          currentMap.fitBounds(
             L.latLngBounds(
               bounds
             ),
@@ -214,6 +239,6 @@ export default function useLeafletMarkers({
     places,
     mapRef,
     markersRef,
-    onSelectPlace,
+    handleSelectPlace,
   ]);
 }

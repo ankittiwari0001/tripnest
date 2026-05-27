@@ -22,13 +22,13 @@ export default function MapSearch({
 
   return (
 
-    <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[999] w-full max-w-2xl px-6">
+    <div className="absolute top-4 left-1/2 -translate-x-1/2 z-[999] w-full px-4 sm:px-6">
 
-      <div className="bg-white/95 backdrop-blur-xl rounded-[32px] shadow-2xl border border-white/20 px-6 py-5 flex items-center gap-4">
+      <div className="max-w-2xl mx-auto bg-white/95 backdrop-blur-xl rounded-[24px] sm:rounded-[32px] shadow-2xl border border-white/20 px-4 sm:px-6 py-4 sm:py-5 flex items-center gap-3 sm:gap-4">
 
         {/* ICON */}
 
-        <div className="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center shrink-0">
+        <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-black text-white flex items-center justify-center shrink-0">
 
           <Search size={20} />
 
@@ -54,7 +54,8 @@ export default function MapSearch({
             w-full
             bg-transparent
             outline-none
-            text-lg
+            text-base
+            sm:text-lg
             placeholder:text-gray-400
             font-medium
           "

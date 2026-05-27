@@ -26,7 +26,7 @@ export default function MapFilters({
 
   return (
 
-    <div className="absolute left-6 bottom-6 z-[999] bg-white/95 backdrop-blur-xl rounded-[36px] shadow-2xl p-6 w-[310px] border border-white/20">
+<div className="absolute bottom-4 left-1/2 -translate-x-1/2 sm:left-6 sm:translate-x-0 z-[999] bg-white/95 backdrop-blur-xl rounded-[28px] sm:rounded-[36px] shadow-2xl p-4 sm:p-6 w-[95%] sm:w-[310px] border border-white/20">
 
       <div className="space-y-5">
 

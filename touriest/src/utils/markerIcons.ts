@@ -1,3 +1,5 @@
+import L from "leaflet";
+
 export function createMarkerIcon(type: string) {
   let bgColor = "#ec4899";
   let icon = "🏨";
@@ -33,9 +35,9 @@ export function createMarkerIcon(type: string) {
     </div>
   `;
 
-  return {
+  return L.divIcon({
     html,
     className: "",
-    iconSize: [46, 46] as [number, number],
-  };
+    iconSize: [46, 46],
+  });
 }

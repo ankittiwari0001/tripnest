@@ -23,8 +23,7 @@ export default function SavedPlacesPanel({
 
   return (
 
-    <div className="absolute right-6 top-24 z-[999] bg-white/95 backdrop-blur-xl rounded-[32px] shadow-2xl p-5 w-[320px] border border-white/20">
-
+    <div className="absolute top-24 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 z-[999] bg-white/95 backdrop-blur-xl rounded-[28px] sm:rounded-[32px] shadow-2xl p-4 sm:p-5 w-[95%] sm:w-[320px] border border-white/20">
       {/* HEADER */}
 
       <div className="flex items-center justify-between mb-5">

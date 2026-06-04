@@ -3,62 +3,68 @@
 import {
   useEffect,
   useState,
+  useCallback,
 } from "react";
+
+import { toast } from "sonner";
 
 import type {
   ExtendedPlace,
 } from "@/types/place";
 
-import {
-  toast,
-} from "sonner";
-
 export default function useSavedPlaces() {
 
-  /* INITIAL STATE */
+  /* HYDRATION STATE */
+
+  const [
+    hydrated,
+    setHydrated,
+  ] = useState(false);
+
+  /* SAVED PLACES */
 
   const [
     savedPlaces,
     setSavedPlaces,
-  ] = useState<ExtendedPlace[]>(() => {
+  ] = useState<
+    ExtendedPlace[]
+  >([]);
 
-    /* SSR SAFE */
+  /* LOAD FROM STORAGE */
 
-    if (
-      typeof window ===
-      "undefined"
-    ) {
-
-      return [];
-    }
-
-    try {
-
-      const saved =
-        window.localStorage.getItem(
+  useEffect(() => {
+    const t = window.setTimeout(() => {
+      try {
+        const saved = window.localStorage.getItem(
           "savedPlaces"
         );
 
-      return saved
+        if (saved) {
+          setSavedPlaces(JSON.parse(saved));
+        }
+      } catch (error) {
+        console.error(
+          "[Saved Places Load Error]",
+          error
+        );
+        toast.error(
+          "Failed to load saved places"
+        );
+      } finally {
+        setHydrated(true);
+      }
+    }, 0);
 
-        ? JSON.parse(saved)
-
-        : [];
-
-    } catch (error) {
-
-      console.error(
-        "Load saved places error:",
-        error
-      );
-
-      return [];
-    }
-  });
+    return () => window.clearTimeout(t);
+  }, []);
 
   /* SAVE TO STORAGE */
 
   useEffect(() => {
+
+    if (!hydrated) {
+      return;
+    }
 
     try {
 
@@ -74,69 +80,88 @@ export default function useSavedPlaces() {
     } catch (error) {
 
       console.error(
-        "Save localStorage error:",
+        "[Saved Places Save Error]",
         error
+      );
+
+      toast.error(
+        "Failed to save places"
       );
     }
 
-  }, [savedPlaces]);
-
-  /* TOGGLE SAVE */
-
-  function toggleSavePlace(
-    place: ExtendedPlace
-  ) {
-
-    setSavedPlaces(
-      (prev) => {
-
-        const exists =
-          prev.some(
-            (p) =>
-              p.id === place.id
-          );
-
-        /* REMOVE */
-
-        if (exists) {
-
-          toast.success(
-            "Removed from saved places"
-          );
-
-          return prev.filter(
-            (p) =>
-              p.id !== place.id
-          );
-        }
-
-        /* ADD */
-
-        toast.success(
-          "Place saved successfully ❤️"
-        );
-
-        return [
-          ...prev,
-          place,
-        ];
-      }
-    );
-  }
+  }, [
+    savedPlaces,
+    hydrated,
+  ]);
 
   /* CHECK SAVED */
 
-  function isSaved(
-    id: number
-  ) {
+  const isSaved =
+    useCallback(
 
-    return savedPlaces.some(
-      (place) =>
-        place.id === id
+      (id: number) => {
+
+        return savedPlaces.some(
+          (place) =>
+            place.id === id
+        );
+      },
+
+      [savedPlaces]
     );
-  }
+
+  /* TOGGLE SAVE */
+
+  const toggleSavePlace =
+    useCallback(
+
+      (
+        place: ExtendedPlace
+      ) => {
+
+        setSavedPlaces(
+          (prev) => {
+
+            const exists =
+              prev.some(
+                (p) =>
+                  p.id === place.id
+              );
+
+            /* REMOVE */
+
+            if (exists) {
+
+              toast.success(
+                "Removed from saved places"
+              );
+
+              return prev.filter(
+                (p) =>
+                  p.id !== place.id
+              );
+            }
+
+            /* ADD */
+
+            toast.success(
+              "Place saved successfully ❤️"
+            );
+
+            return [
+              ...prev,
+              place,
+            ];
+          }
+        );
+      },
+
+      []
+    );
 
   return {
+
+    hydrated,
 
     savedPlaces,
 

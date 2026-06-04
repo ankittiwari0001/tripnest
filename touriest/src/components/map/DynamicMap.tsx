@@ -24,7 +24,7 @@ import PlaceDrawer from "./PlaceDrawer";
 import SavedPlacesPanel from "./SavedPanel";
 import MapFilters from "./MapFilters";
 import MapSearch from "./MapSearch";
-import MapLoading from "./MapLoading";
+import MapLoading from "./MapSpinner";
 import MapError from "./MapError";
 import MapEmpty from "./MapEmpty";
 
@@ -111,6 +111,11 @@ export default function DynamicMap() {
       null
     );
 
+  const mapContainerRef =
+    useRef<HTMLDivElement | null>(
+      null
+    );
+
   /* USER LOCATION */
 
   useEffect(() => {
@@ -162,22 +167,16 @@ export default function DynamicMap() {
         return;
       }
 
-      const leaflet =
-        await import(
-          "leaflet"
-        );
+     const L =
+  await import("leaflet");
 
-      const L =
-        leaflet.default;
 
       if (!isMounted) {
         return;
       }
 
       const container =
-        document.getElementById(
-          "map"
-        );
+        mapContainerRef.current;
 
       if (!container || !isMounted) {
         return;
@@ -186,6 +185,8 @@ export default function DynamicMap() {
       /* FIX:
          REMOVE OLD LEAFLET INSTANCE
       */
+
+      
 
       if (
         (
@@ -212,8 +213,8 @@ export default function DynamicMap() {
           }
         ).setView(
           [
-            23.2599,
-            77.4126,
+            userLocation.lat,
+            userLocation.lng,
           ],
           15
         );
@@ -262,10 +263,10 @@ export default function DynamicMap() {
       /* USER MARKER */
 
       L.marker(
-        [
-          23.2599,
-          77.4126,
-        ],
+       [
+        userLocation.lat,
+       userLocation.lng,
+  ],
         {
           icon: userIcon,
         }
@@ -281,15 +282,13 @@ export default function DynamicMap() {
         "moveend",
         () => {
 
-          if (
-            !isMounted ||
-            debounceRef.current
-          ) {
-
-            window.clearTimeout(
-              debounceRef.current!
-            );
-          }
+         if (
+  debounceRef.current !== null
+) {
+  window.clearTimeout(
+    debounceRef.current
+  );
+}
 
           debounceRef.current =
             window.setTimeout(
@@ -329,14 +328,13 @@ export default function DynamicMap() {
 
       /* CLEAR TIMEOUT */
 
-      if (
-        debounceRef.current
-      ) {
-
-        window.clearTimeout(
-          debounceRef.current
-        );
-      }
+    if (
+  debounceRef.current !== null
+) {
+  window.clearTimeout(
+    debounceRef.current
+  );
+}
 
       /* REMOVE MAP */
 
@@ -432,14 +430,19 @@ export default function DynamicMap() {
 
     <section className="max-w-7xl mx-auto px-6 py-16">
 
-      <div className="relative h-[750px] rounded-[40px] overflow-hidden shadow-2xl border border-gray-200">
+  <div className="relative h-[100dvh] sm:h-[750px] rounded-[40px] overflow-hidden shadow-2xl border border-gray-200">
 
         {/* MAP */}
 
+
         <div
-          id="map"
+          ref={mapContainerRef}
           className="absolute inset-0 z-0"
         />
+
+          {loading && (
+             <MapLoading />
+           )}
 
         {/* TOP BAR */}
 
@@ -462,6 +465,7 @@ export default function DynamicMap() {
 
           <div className="h-3 w-3 rounded-full bg-green-500 animate-pulse" />
 
+        
         </div>
 
         {/* SEARCH */}
@@ -538,18 +542,27 @@ export default function DynamicMap() {
           selectedPlace
         }
 
+        open={
+          selectedPlace !== null
+        }
+
         onClose={() =>
           setSelectedPlace(
             null
           )
         }
 
-        onSave={
+        onToggleSave={
           toggleSavePlace
         }
 
-        savedPlaces={
-          savedPlaces
+        isSaved={
+          selectedPlace
+            ? savedPlaces.some(
+                (p) =>
+                  p.id === selectedPlace.id
+              )
+            : false
         }
       />
 

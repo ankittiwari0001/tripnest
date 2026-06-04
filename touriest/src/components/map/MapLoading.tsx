@@ -4,29 +4,95 @@ export default function MapLoading() {
 
   return (
 
-    <div className="absolute inset-0 z-[9999] bg-black/30 backdrop-blur-sm flex items-center justify-center">
+    <div
+      className="
+        absolute
+        inset-0
+        z-[999]
+        bg-white/70
+        backdrop-blur-sm
+        flex
+        items-center
+        justify-center
+      "
+    >
 
-      <div className="bg-white rounded-[32px] px-10 py-8 shadow-2xl flex flex-col items-center gap-5">
+      <div
+        className="
+          w-[320px]
+          bg-white
+          rounded-[32px]
+          shadow-xl
+          p-6
+        "
+      >
 
-        {/* SPINNER */}
+        <div
+          className="
+            h-6
+            w-40
+            rounded-lg
+            bg-zinc-200
+            animate-pulse
+            mb-6
+          "
+        />
 
-        <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin" />
+        <div className="space-y-4">
 
-        {/* TEXT */}
+          {[1, 2, 3].map(
+            (item) => (
 
-        <div className="text-center">
+              <div
 
-          <h3 className="text-2xl font-black">
+                key={item}
 
-            Loading Places
+                className="
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
 
-          </h3>
+                <div
+                  className="
+                    w-14
+                    h-14
+                    rounded-2xl
+                    bg-zinc-200
+                    animate-pulse
+                  "
+                />
 
-          <p className="text-gray-500 mt-2">
+                <div className="flex-1">
 
-            Discovering nearby hotels,
-            restaurants & attractions...
-          </p>
+                  <div
+                    className="
+                      h-4
+                      w-full
+                      rounded
+                      bg-zinc-200
+                      animate-pulse
+                      mb-2
+                    "
+                  />
+
+                  <div
+                    className="
+                      h-4
+                      w-2/3
+                      rounded
+                      bg-zinc-200
+                      animate-pulse
+                    "
+                  />
+
+                </div>
+
+              </div>
+
+            )
+          )}
 
         </div>
 

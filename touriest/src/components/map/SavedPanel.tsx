@@ -72,11 +72,8 @@ export default function SavedPlacesPanel({
             >
 
               {/* IMAGE */}
-
               {/* eslint-disable-next-line @next/next/no-img-element */}
-
               <img
-
                 src={
                   place.image
                 }

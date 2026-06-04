@@ -1,6 +1,4 @@
-import L from "leaflet";
-
-export function createMarkerIcon(type: string) {
+export function createMarkerIcon(type: string, L: typeof import("leaflet")) {
   let bgColor = "#ec4899";
   let icon = "🏨";
 

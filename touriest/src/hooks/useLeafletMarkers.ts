@@ -17,7 +17,7 @@ import type {
 
 import {
   createMarkerIcon,
-} from "@/utils/markerIcons";
+} from "../utils/markerIcons";
 
 interface Props {
 
@@ -72,9 +72,8 @@ export default function useLeafletMarkers({
 
     async function renderMarkers() {
       try {
-        const leaflet = await import("leaflet");
+      const L = (await import("leaflet")).default;
         await import("leaflet.markercluster");
-        const L = leaflet.default;
 
         const currentMap = mapRef.current;
 
@@ -153,7 +152,8 @@ export default function useLeafletMarkers({
 
               const markerIcon =
                 createMarkerIcon(
-                  type
+                  type,
+                  L
                 );
 
               const marker =

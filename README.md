@@ -30,11 +30,11 @@ The goal is to create a real-world travel product rather than a traditional coll
 
 ### Interactive Map
 
-![Map Experience](https://raw.githubusercontent.com/ankittiwari0001/tripnest/main/public/map1.png)
+![Map Experience](touriest/public/map1.png)
 
 ### Nearby Discovery
 
-![Nearby Places](https://raw.githubusercontent.com/ankittiwari0001/tripnest/main/public/map2.png)
+![Nearby Places](touriest/public/map2.png)
 
 ---
 

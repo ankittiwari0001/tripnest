@@ -6,6 +6,7 @@ import {
   Toaster,
 } from "sonner";
 
+
 export default function RootLayout({
   children,
 }: {
@@ -24,7 +25,18 @@ export default function RootLayout({
         {children}
 
         {/* TOAST (sonner) */}
-        <Toaster position="top-center" richColors closeButton />
+   <Toaster
+       position="top-right"
+       richColors
+       expand
+       closeButton
+      toastOptions={{
+      style: {
+        zIndex: 999999,
+        marginTop: "90px",
+      },
+    }}
+  />
 
       </body>
 

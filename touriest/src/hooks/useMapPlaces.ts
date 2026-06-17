@@ -2,6 +2,7 @@
 
 import {
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -31,7 +32,7 @@ export default function useMapPlaces({
 
   type,
 
-  searchQuery,
+  searchQuery = "",
 }: Props) {
 
   /* STATES */
@@ -57,6 +58,9 @@ export default function useMapPlaces({
 
   useEffect(() => {
 
+    const controller =
+      new AbortController();
+
     async function fetchPlaces() {
 
       try {
@@ -67,7 +71,13 @@ export default function useMapPlaces({
 
         const response =
           await fetch(
-            `/api/nearby?lat=${lat}&lng=${lng}&type=${type}`
+
+            `/api/nearby?lat=${lat}&lng=${lng}&type=${type}`,
+
+            {
+              signal:
+                controller.signal,
+            }
           );
 
         if (
@@ -75,7 +85,7 @@ export default function useMapPlaces({
         ) {
 
           throw new Error(
-            "Failed to fetch places"
+            `HTTP Error: ${response.status}`
           );
         }
 
@@ -85,32 +95,25 @@ export default function useMapPlaces({
         const elements =
           data.elements || [];
 
-        /* SEARCH FILTER */
-
-        const filtered =
-          elements.filter(
-            (place) => {
-
-              const text = `
-                ${place.tags.name || ""}
-                ${place.vibe || ""}
-                ${place.summary || ""}
-              `.toLowerCase();
-
-              return text.includes(
-                searchQuery.toLowerCase()
-              );
-            }
-          );
+        /* STORE RAW DATA */
 
         setPlaces(
-          filtered
+          elements
         );
 
       } catch (error) {
 
+        if (
+          error instanceof DOMException &&
+          error.name ===
+            "AbortError"
+        ) {
+
+          return;
+        }
+
         console.error(
-          "Places fetch error:",
+          "[Places Fetch Error]",
           error
         );
 
@@ -126,16 +129,58 @@ export default function useMapPlaces({
 
     fetchPlaces();
 
+    return () => {
+
+      controller.abort();
+    };
+
   }, [
     lat,
     lng,
     type,
-    searchQuery,
   ]);
+
+  /* LOCAL SEARCH FILTER */
+
+  const filteredPlaces =
+    useMemo(() => {
+
+      const query =
+        searchQuery
+          .trim()
+          .toLowerCase();
+
+      if (!query) {
+
+        return places;
+      }
+
+      return places.filter(
+        (place) => {
+
+          const text = `
+            ${place.tags?.name ?? ""}
+            ${place.vibe ?? ""}
+            ${place.summary ?? ""}
+          `
+            .toLowerCase()
+            .trim();
+
+          return text.includes(
+            query
+          );
+        }
+      );
+
+    }, [
+      places,
+      searchQuery,
+    ]);
 
   return {
 
-    places,
+    places:
+      filteredPlaces,
 
     loading,
 

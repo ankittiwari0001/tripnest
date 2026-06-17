@@ -66,6 +66,11 @@ export default function DynamicMap() {
     lng: 77.4126,
   });
 
+  const initialUserLocation = useRef(userLocation);
+
+  const [savedOpen, setSavedOpen] =
+  useState(false);
+
   /* SAVED PLACES */
 
   const {
@@ -213,8 +218,8 @@ export default function DynamicMap() {
           }
         ).setView(
           [
-            userLocation.lat,
-            userLocation.lng,
+            initialUserLocation.current.lat,
+            initialUserLocation.current.lng,
           ],
           15
         );
@@ -264,8 +269,8 @@ export default function DynamicMap() {
 
       L.marker(
        [
-        userLocation.lat,
-       userLocation.lng,
+        initialUserLocation.current.lat,
+       initialUserLocation.current.lng,
   ],
         {
           icon: userIcon,
@@ -426,11 +431,27 @@ export default function DynamicMap() {
       handleSelectPlace,
   });
 
+  const handleReset = useCallback(() => {
+    setSearchQuery("");
+    setSelectedType("all");
+
+    if (mapRef.current) {
+      mapRef.current.setView(
+        [userLocation.lat, userLocation.lng],
+        mapRef.current.getZoom(),
+        {
+          animate: true,
+          duration: 0.5,
+        }
+      );
+    }
+  }, [userLocation]);
+
   return (
 
     <section className="max-w-7xl mx-auto px-6 py-16">
 
-  <div className="relative h-[100dvh] sm:h-[750px] rounded-[40px] overflow-hidden shadow-2xl border border-gray-200">
+  <div className="relative h-[calc(100dvh-120px)] rounded-[40px] overflow-hidden shadow-2xl border border-gray-200">
 
         {/* MAP */}
 
@@ -440,13 +461,10 @@ export default function DynamicMap() {
           className="absolute inset-0 z-0"
         />
 
-          {loading && (
-             <MapLoading />
-           )}
 
         {/* TOP BAR */}
 
-        <div className="absolute top-6 left-6 z-[999] bg-white/95 backdrop-blur-xl shadow-xl rounded-3xl px-6 py-4 flex items-center gap-6 border border-white/20">
+        <div className="absolute top-6 left-6 z-[1000] bg-white/95 backdrop-blur-xl shadow-xl rounded-3xl px-6 py-4 flex items-center gap-6 border border-white/20">
 
           <div className="flex items-center gap-3">
 
@@ -459,7 +477,7 @@ export default function DynamicMap() {
 
               AI Tourism Discovery
 
-            </span>
+            </span>  
 
           </div>
 
@@ -470,16 +488,20 @@ export default function DynamicMap() {
 
         {/* SEARCH */}
 
-        <MapSearch
+       <MapSearch
+        value={
+           searchQuery
+  }
 
-          value={
-            searchQuery
-          }
+  onChange={
+    setSearchQuery
+  }
 
-          onChange={
-            setSearchQuery
-          }
-        />
+  resultsCount={
+    places.length
+        }
+      />
+      
 
         {/* FILTERS */}
 
@@ -494,19 +516,62 @@ export default function DynamicMap() {
           }
         />
 
+        <button
+          onClick={() =>
+            setSavedOpen(true)
+          }
+          className="
+            absolute
+            bottom-6
+            right-6
+            z-[1001]
+            bg-white/95
+            backdrop-blur-xl
+            shadow-2xl
+            rounded-full
+            px-5
+            py-4
+            flex
+            items-center
+            gap-3
+            font-bold
+            hover:scale-105
+            transition-all
+          "
+        >
+          ❤️
+
+          <span>Saved Places</span>
+
+          <div
+            className="
+              w-6
+              h-6
+              rounded-full
+              bg-red-500
+              text-white
+              text-xs
+              flex
+              items-center
+              justify-center
+            "
+          >
+            {savedPlaces.length}
+          </div>
+        </button>
+
       </div>
+
 
       {/* SAVED PLACES */}
 
       <SavedPlacesPanel
-
-        savedPlaces={
-          savedPlaces
+        open={savedOpen}
+        onClose={() =>
+          setSavedOpen(false)
         }
-
-        onRemove={
-          toggleSavePlace
-        }
+        savedPlaces={savedPlaces}
+        onRemove={toggleSavePlace}
       />
 
        {loading && (
@@ -530,7 +595,7 @@ export default function DynamicMap() {
      {!loading &&
            !error &&
        places.length === 0 && (
-        <MapEmpty />
+        <MapEmpty onReset={handleReset} />
       )}
 
 

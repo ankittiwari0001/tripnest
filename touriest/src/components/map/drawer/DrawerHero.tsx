@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-
 import Image from "next/image";
 
 import {
@@ -15,67 +14,41 @@ import type {
 } from "@/types/place";
 
 interface Props {
-
-  place:
-    ExtendedPlace;
-
+  place: ExtendedPlace;
   onClose: () => void;
 }
 
 export default function DrawerHero({
-
   place,
-
   onClose,
 }: Props) {
+  const [imageError, setImageError] =
+    useState(false);
 
-  const [
-    imageError,
-
-    setImageError,
-  ] = useState(false);
+  const imageSrc =
+    place.image?.trim()
+      ? place.image
+      : "/fallback-place.jpg";
 
   return (
-
     <div className="relative h-[320px] overflow-hidden">
-
       {/* IMAGE */}
 
       {!imageError ? (
-
         <Image
-
-          src={
-            place.image ||
-
-            "https://images.unsplash.com/photo-1506744038136-46273834b3fb"
-          }
-
+          src={imageSrc}
           alt={
-            place.tags?.name ||
+            place.tags?.name ??
             "Place"
           }
-
           fill
-
-          priority
-
-          className="
-            object-cover
-            transition-transform
-            duration-700
-            hover:scale-105
-          "
-
+          className="object-cover"
           onError={() =>
-            setImageError(
-              true
-            )
+            setImageError(true)
           }
+          unoptimized
         />
-
       ) : (
-
         <div
           className="
             w-full
@@ -87,9 +60,7 @@ export default function DrawerHero({
             text-zinc-500
           "
         >
-
           Image unavailable
-
         </div>
       )}
 
@@ -109,9 +80,8 @@ export default function DrawerHero({
       {/* CLOSE BUTTON */}
 
       <button
-
+        type="button"
         onClick={onClose}
-
         className="
           absolute
           top-5
@@ -131,9 +101,7 @@ export default function DrawerHero({
           transition-all
         "
       >
-
         <X size={22} />
-
       </button>
 
       {/* RATING */}
@@ -157,7 +125,6 @@ export default function DrawerHero({
           font-semibold
         "
       >
-
         <Star
           size={18}
           className="
@@ -167,7 +134,6 @@ export default function DrawerHero({
         />
 
         {place.rating ?? 4.8}
-
       </div>
 
       {/* PLACE INFO */}
@@ -181,7 +147,6 @@ export default function DrawerHero({
           text-white
         "
       >
-
         <h2
           className="
             text-3xl
@@ -189,10 +154,8 @@ export default function DrawerHero({
             leading-tight
           "
         >
-
-          {place.tags?.name ||
+          {place.tags?.name ??
             "Unknown Place"}
-
         </h2>
 
         <div
@@ -204,19 +167,13 @@ export default function DrawerHero({
             text-white/90
           "
         >
-
           <MapPin size={18} />
 
           <span className="text-sm">
-
             Nearby travel destination
-
           </span>
-
         </div>
-
       </div>
-
     </div>
   );
 }

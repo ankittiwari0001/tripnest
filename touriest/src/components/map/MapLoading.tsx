@@ -8,7 +8,7 @@ export default function MapLoading() {
       className="
         absolute
         inset-0
-        z-[999]
+        z-[999] 
         bg-white/70
         backdrop-blur-sm
         flex

@@ -55,7 +55,7 @@ export default function MapError({
 
             onClick={onRetry}
 
-            className="bg-black text-white px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition-all duration-300"
+            className="bg-black text-white px-6 py-3 rounded-2xl font-semibold hover:scale-105 active:scale-95 transition-all duration-300 focus:outline-none focus:ring-4 focus:ring-black/10"
           >
 
             Retry

@@ -1,13 +1,16 @@
 "use client";
 
+import Image from "next/image";
 import type {
   ExtendedPlace,
 } from "@/types/place";
 
 interface Props {
+  open: boolean;
 
-  savedPlaces:
-    ExtendedPlace[];
+  onClose: () => void;
+
+  savedPlaces: ExtendedPlace[];
 
   onRemove: (
     place: ExtendedPlace
@@ -16,123 +19,221 @@ interface Props {
 
 export default function SavedPlacesPanel({
 
+  open,
+
+  onClose,
+
   savedPlaces,
 
   onRemove,
+
 }: Props) {
+
+  if (!open) {
+    return null;
+  }
 
   return (
 
-    <div className="absolute top-24 left-1/2 -translate-x-1/2 sm:left-auto sm:right-6 sm:translate-x-0 z-[999] bg-white/95 backdrop-blur-xl rounded-[28px] sm:rounded-[32px] shadow-2xl p-4 sm:p-5 w-[95%] sm:w-[320px] border border-white/20">
-      {/* HEADER */}
+    <>
 
-      <div className="flex items-center justify-between mb-5">
+      {/* BACKDROP */}
 
-        <h3 className="font-black text-xl">
+      <div
+        onClick={onClose}
+        className="
+          fixed
+          inset-0
+          bg-black/40
+          backdrop-blur-sm
+          z-[9998]
+        "
+      />
 
-          Saved Places
+      {/* DRAWER */}
 
-        </h3>
+      <div
+        className="
+          fixed
+          right-0
+          top-0
+          h-full
+          w-full
+          sm:w-[420px]
+          bg-white
+          z-[9999]
+          shadow-2xl
+          overflow-y-auto
+          p-5
+        "
+      >
 
-        <div className="bg-red-500 text-white text-xs font-bold px-3 py-1 rounded-full">
+        {/* HEADER */}
 
-          {savedPlaces.length}
+        <div className="flex items-center justify-between mb-5">
 
-        </div>
+          <h3 className="font-black text-xl">
 
-      </div>
+            Saved Places
 
-      {/* EMPTY */}
+          </h3>
 
-      {savedPlaces.length === 0 && (
-
-        <div className="text-center py-10">
-
-          <p className="text-gray-400 text-sm">
-
-            No saved places yet
-
-          </p>
-
-        </div>
-      )}
-
-      {/* LIST */}
-
-      <div className="space-y-4 max-h-[420px] overflow-y-auto pr-1">
-
-        {savedPlaces.map(
-          (place) => (
+          <div className="flex items-center gap-3">
 
             <div
-
-              key={place.id}
-
-              className="bg-gray-100 hover:bg-gray-200 transition-all duration-300 rounded-3xl p-3 flex items-center gap-4"
+              className="
+                bg-red-500
+                text-white
+                text-xs
+                font-bold
+                px-3
+                py-1
+                rounded-full
+              "
             >
 
-              {/* IMAGE */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={
-                  place.image
-                }
-
-                alt={
-                  place.tags.name
-                }
-
-                className="w-16 h-16 rounded-2xl object-cover"
-              />
-
-              {/* INFO */}
-
-              <div className="flex-1 min-w-0">
-
-                <p className="font-bold truncate">
-
-                  {place.tags.name}
-
-                </p>
-
-                <p className="text-xs text-gray-500 capitalize mt-1">
-
-                  {
-
-                    place.tags
-                      .tourism ||
-
-                    place.tags
-                      .amenity
-                  }
-
-                </p>
-
-              </div>
-
-              {/* REMOVE */}
-
-              <button
-
-                onClick={() =>
-                  onRemove(
-                    place
-                  )
-                }
-
-                className="w-10 h-10 rounded-full bg-red-500 text-white flex items-center justify-center hover:scale-110 transition-all duration-300"
-              >
-
-                ❤️
-
-              </button>
+              {savedPlaces.length}
 
             </div>
-          )
+
+            <button
+              onClick={onClose}
+              className="
+                w-10
+                h-10
+                rounded-full
+                bg-gray-100
+                hover:bg-gray-200
+                transition-all
+              "
+            >
+
+              ✕
+
+            </button>
+
+          </div>
+
+        </div>
+
+        {/* EMPTY */}
+
+        {savedPlaces.length === 0 && (
+
+          <div className="text-center py-10">
+
+            <p className="text-gray-400 text-sm">
+
+              No saved places yet
+
+            </p>
+
+          </div>
+
         )}
+
+        {/* LIST */}
+
+        <div className="space-y-4">
+
+          {savedPlaces.map(
+            (place) => (
+
+              <div
+
+                key={place.id}
+
+                className="
+                  bg-gray-100
+                  hover:bg-gray-200
+                  transition-all
+                  duration-300
+                  rounded-3xl
+                  p-3
+                  flex
+                  items-center
+                  gap-4
+                "
+              >
+
+                {/* IMAGE */}
+
+                <div className="relative w-16 h-16 rounded-2xl overflow-hidden bg-gray-200">
+                  <Image
+                    src={
+                      place.image || "/fallback-place.jpg"
+                    }
+                    alt={
+                      place.tags.name || "Saved place"
+                    }
+                    fill
+                    className="object-cover"
+                    unoptimized
+                  />
+                </div>
+
+                {/* INFO */}
+
+                <div className="flex-1 min-w-0">
+
+                  <p className="font-bold truncate">
+
+                    {place.tags.name}
+
+                  </p>
+
+                  <p className="text-xs text-gray-500 capitalize mt-1">
+
+                    {
+                      place.tags
+                        .tourism ||
+
+                      place.tags
+                        .amenity
+                    }
+
+                  </p>
+
+                </div>
+
+                {/* REMOVE */}
+
+                <button
+
+                  onClick={() =>
+                    onRemove(
+                      place
+                    )
+                  }
+
+                  className="
+                    w-10
+                    h-10
+                    rounded-full
+                    bg-red-500
+                    text-white
+                    flex
+                    items-center
+                    justify-center
+                    hover:scale-110
+                    transition-all
+                    duration-300
+                  "
+                >
+
+                  ❤️
+
+                </button>
+
+              </div>
+            )
+          )}
+
+        </div>
 
       </div>
 
-    </div>
+    </>
+
   );
 }

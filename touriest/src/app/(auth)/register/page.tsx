@@ -2,14 +2,21 @@
 
 import { useState } from "react";
 
+import Link from "next/link";
+
 import { useRouter } from "next/navigation";
 
-import toast from "react-hot-toast";
+import {
+  Mail,
+  Lock,
+  User,
+  ArrowRight,
+} from "lucide-react";
+
+import { toast } from "sonner";
 
 export default function RegisterPage() {
-
-  const router =
-    useRouter();
+  const router = useRouter();
 
   const [name, setName] =
     useState("");
@@ -17,9 +24,12 @@ export default function RegisterPage() {
   const [email, setEmail] =
     useState("");
 
+  const [password, setPassword] =
+    useState("");
+
   const [
-    password,
-    setPassword,
+    confirmPassword,
+    setConfirmPassword,
   ] = useState("");
 
   const [loading, setLoading] =
@@ -28,11 +38,28 @@ export default function RegisterPage() {
   async function handleRegister(
     e: React.FormEvent
   ) {
-
     e.preventDefault();
 
-    try {
+    if (
+      password !==
+      confirmPassword
+    ) {
+      toast.error(
+        "Passwords do not match"
+      );
+      return;
+    }
 
+    if (
+      password.length < 6
+    ) {
+      toast.error(
+        "Password must be at least 6 characters"
+      );
+      return;
+    }
+
+    try {
       setLoading(true);
 
       const res = await fetch(
@@ -57,123 +84,355 @@ export default function RegisterPage() {
         await res.json();
 
       if (!res.ok) {
-
         toast.error(
-          data.message
+          data.message ||
+            "Registration failed"
         );
 
         return;
       }
 
       toast.success(
-        "Account created 🚀"
+        "Account created successfully 🚀"
       );
 
-      router.push("/login");
-
-    } catch (error) {
-
+      router.push(
+        "/login"
+      );
+    } catch {
       toast.error(
         "Something went wrong"
       );
-
     } finally {
-
       setLoading(false);
-
     }
   }
 
   return (
-    <main className="min-h-screen bg-gray-100 flex items-center justify-center px-6">
+    <main
+      className="
+        min-h-screen
+        bg-gradient-to-br
+        from-slate-950
+        via-slate-900
+        to-blue-950
+        flex
+        items-center
+        justify-center
+        px-6
+      "
+    >
+      <div
+        className="
+          w-full
+          max-w-md
+          bg-white/95
+          backdrop-blur-xl
+          rounded-[32px]
+          shadow-2xl
+          border
+          border-white/20
+          p-10
+        "
+      >
+        {/* HEADER */}
 
-      <div className="bg-white w-full max-w-md rounded-[32px] shadow-xl p-10">
+        <div className="text-center">
+          <h1
+            className="
+              text-4xl
+              font-black
+              text-slate-900
+            "
+          >
+            Create Account 🚀
+          </h1>
 
-        <h1 className="text-4xl font-black text-center mb-8">
+          <p
+            className="
+              mt-3
+              text-slate-500
+            "
+          >
+            Start your journey
+            with TripNest
+          </p>
+        </div>
 
-          Create Account 🚀
-
-        </h1>
+        {/* FORM */}
 
         <form
           onSubmit={
             handleRegister
           }
-          className="space-y-6"
+          className="
+            mt-8
+            space-y-5
+          "
         >
+          {/* NAME */}
 
-          <input
-            type="text"
+          <div>
+            <label
+              className="
+                block
+                mb-2
+                font-medium
+                text-slate-700
+              "
+            >
+              Full Name
+            </label>
 
-            required
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                border
+                border-slate-300
+                rounded-2xl
+                px-4
+                py-4
+                focus-within:border-blue-500
+              "
+            >
+              <User
+                size={18}
+                className="text-slate-400"
+              />
 
-            placeholder="Name"
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) =>
+                  setName(
+                    e.target.value
+                  )
+                }
+                placeholder="Enter your name"
+                className="
+                  w-full
+                  outline-none
+                  bg-transparent
+                "
+              />
+            </div>
+          </div>
 
-            value={name}
+          {/* EMAIL */}
 
-            onChange={(e) =>
-              setName(
-                e.target.value
-              )
-            }
+          <div>
+            <label
+              className="
+                block
+                mb-2
+                font-medium
+                text-slate-700
+              "
+            >
+              Email
+            </label>
 
-            className="w-full border border-gray-300 rounded-2xl px-5 py-4"
-          />
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                border
+                border-slate-300
+                rounded-2xl
+                px-4
+                py-4
+                focus-within:border-blue-500
+              "
+            >
+              <Mail
+                size={18}
+                className="text-slate-400"
+              />
 
-          <input
-            type="email"
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) =>
+                  setEmail(
+                    e.target.value
+                  )
+                }
+                placeholder="Enter email"
+                className="
+                  w-full
+                  outline-none
+                  bg-transparent
+                "
+              />
+            </div>
+          </div>
 
-            required
+          {/* PASSWORD */}
 
-            placeholder="Email"
+          <div>
+            <label
+              className="
+                block
+                mb-2
+                font-medium
+                text-slate-700
+              "
+            >
+              Password
+            </label>
 
-            value={email}
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                border
+                border-slate-300
+                rounded-2xl
+                px-4
+                py-4
+                focus-within:border-blue-500
+              "
+            >
+              <Lock
+                size={18}
+                className="text-slate-400"
+              />
 
-            onChange={(e) =>
-              setEmail(
-                e.target.value
-              )
-            }
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) =>
+                  setPassword(
+                    e.target.value
+                  )
+                }
+                placeholder="Enter password"
+                className="
+                  w-full
+                  outline-none
+                  bg-transparent
+                "
+              />
+            </div>
+          </div>
 
-            className="w-full border border-gray-300 rounded-2xl px-5 py-4"
-          />
+          {/* CONFIRM PASSWORD */}
 
-          <input
-            type="password"
+          <div>
+            <label
+              className="
+                block
+                mb-2
+                font-medium
+                text-slate-700
+              "
+            >
+              Confirm Password
+            </label>
 
-            required
+            <div
+              className="
+                flex
+                items-center
+                gap-3
+                border
+                border-slate-300
+                rounded-2xl
+                px-4
+                py-4
+                focus-within:border-blue-500
+              "
+            >
+              <Lock
+                size={18}
+                className="text-slate-400"
+              />
 
-            placeholder="Password"
+              <input
+                type="password"
+                required
+                value={
+                  confirmPassword
+                }
+                onChange={(e) =>
+                  setConfirmPassword(
+                    e.target.value
+                  )
+                }
+                placeholder="Confirm password"
+                className="
+                  w-full
+                  outline-none
+                  bg-transparent
+                "
+              />
+            </div>
+          </div>
 
-            value={password}
-
-            onChange={(e) =>
-              setPassword(
-                e.target.value
-              )
-            }
-
-            className="w-full border border-gray-300 rounded-2xl px-5 py-4"
-          />
+          {/* SUBMIT */}
 
           <button
             type="submit"
-
             disabled={loading}
-
-            className="w-full bg-blue-600 text-white py-4 rounded-2xl font-semibold hover:bg-blue-700 transition"
+            className="
+              w-full
+              bg-blue-600
+              text-white
+              py-4
+              rounded-2xl
+              font-semibold
+              hover:bg-blue-700
+              transition-all
+              disabled:opacity-50
+              disabled:cursor-not-allowed
+              flex
+              items-center
+              justify-center
+              gap-2
+            "
           >
-
             {loading
               ? "Creating..."
-              : "Register"}
+              : "Create Account"}
 
+            {!loading && (
+              <ArrowRight
+                size={18}
+              />
+            )}
           </button>
-
         </form>
 
-      </div>
+        {/* LOGIN LINK */}
 
+        <p
+          className="
+            mt-8
+            text-center
+            text-slate-500
+          "
+        >
+          Already have an
+          account?{" "}
+          <Link
+            href="/login"
+            className="
+              text-blue-600
+              font-semibold
+              hover:underline
+            "
+          >
+            Login
+          </Link>
+        </p>
+      </div>
     </main>
   );
 }

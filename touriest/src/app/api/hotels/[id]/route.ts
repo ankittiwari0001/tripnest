@@ -14,9 +14,9 @@ export async function GET(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       id: string;
-    };
+    }>;
   }
 ) {
 
@@ -24,9 +24,11 @@ export async function GET(
 
     await connectDB();
 
+    const { id } = await params;
+
     const hotel =
       await Hotel.findById(
-        params.id
+        id
       );
 
     if (!hotel) {
@@ -77,15 +79,17 @@ export async function DELETE(
   {
     params,
   }: {
-    params: {
+    params: Promise<{
       id: string;
-    };
+    }>;
   }
 ) {
 
   try {
 
     await connectDB();
+
+    const { id } = await params;
 
     const token =
       req.headers
@@ -129,7 +133,7 @@ export async function DELETE(
     }
 
     await Hotel.findByIdAndDelete(
-      params.id
+      id
     );
 
     return NextResponse.json(

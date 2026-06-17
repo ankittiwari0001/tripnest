@@ -1,16 +1,13 @@
 "use client";
 
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
+
 import type {
   ExtendedPlace,
 } from "@/types/place";
-
-// import {
-//   DrawerHero,
-//   DrawerTags,
-//   DrawerSummary,
-//   DrawerActions,
-//   DrawerFooter,
-// } from "./drawer";
 
 import DrawerHero from "./drawer/DrawerHero";
 import DrawerTags from "./drawer/DrawerTags";
@@ -47,87 +44,159 @@ export default function PlaceDrawer({
   isSaved,
 }: Props) {
 
-  if (
-    !place ||
-    !open
-  ) {
-
+  if (!place) {
     return null;
   }
 
   return (
 
-    <>
+    <AnimatePresence>
 
-      {/* BACKDROP */}
+      {open && (
 
-      <div
+        <>
 
-        onClick={onClose}
+          {/* BACKDROP */}
 
-        className="
-          fixed inset-0
-          bg-black/40
-          backdrop-blur-sm
-          z-[9998]
-        "
-      />
+          <motion.div
 
-      {/* DRAWER */}
+            initial={{
+              opacity: 0,
+            }}
 
-      <div
-        className="
-          fixed
-          right-0
-          top-0
-          h-full
-          w-full
-          sm:w-[520px]
-          bg-white
-          z-[9999]
-          shadow-2xl
-          overflow-y-auto
-        "
-      >
+            animate={{
+              opacity: 1,
+            }}
 
-        <DrawerHero
+            exit={{
+              opacity: 0,
+            }}
 
-          place={place}
+            transition={{
+              duration: 0.25,
+            }}
 
-          onClose={onClose}
-        />
+            onClick={onClose}
 
-        <div className="p-6 sm:p-8">
-
-          <DrawerTags
-            vibe={place.vibe}
+            className="
+              fixed
+              inset-0
+              bg-black/40
+              backdrop-blur-sm
+              z-[9998]
+            "
           />
 
-          <DrawerSummary
-            summary={
-              place.summary
-            }
-          />
+          {/* DRAWER */}
 
-          <DrawerActions
+          <motion.div
 
-            place={place}
+            initial={{
+              x: 600,
+              opacity: 0,
+            }}
 
-            isSaved={
-              isSaved
-            }
+            animate={{
+              x: 0,
+              opacity: 1,
+            }}
 
-            onToggleSave={
-              onToggleSave
-            }
-          />
+            exit={{
+              x: 600,
+              opacity: 0,
+            }}
 
-          <DrawerFooter />
+            transition={{
+              duration: 0.35,
+              ease: [
+                0.22,
+                1,
+                0.36,
+                1,
+              ],
+            }}
 
-        </div>
+            className="
+              fixed
+              right-0
+              top-0
+              h-[100dvh]
+              w-full
+              sm:w-[520px]
+              bg-white
+              z-[9999]
+              shadow-2xl
+              overflow-y-auto
+            "
+          >
 
-      </div>
+            {/* HERO */}
 
-    </>
+            <DrawerHero
+
+              place={place}
+
+              onClose={onClose}
+            />
+
+            {/* CONTENT */}
+
+            <motion.div
+
+              initial={{
+                y: 20,
+                opacity: 0,
+              }}
+
+              animate={{
+                y: 0,
+                opacity: 1,
+              }}
+
+              transition={{
+                delay: 0.15,
+                duration: 0.3,
+              }}
+
+              className="
+                p-6
+                sm:p-8
+              "
+            >
+
+              <DrawerTags
+                vibe={place.vibe}
+              />
+
+              <DrawerSummary
+                summary={
+                  place.summary
+                }
+              />
+
+              <DrawerActions
+
+                place={place}
+
+                isSaved={
+                  isSaved
+                }
+
+                onToggleSave={
+                  onToggleSave
+                }
+              />
+
+              <DrawerFooter />
+
+            </motion.div>
+
+          </motion.div>
+
+        </>
+
+      )}
+
+    </AnimatePresence>
   );
 }

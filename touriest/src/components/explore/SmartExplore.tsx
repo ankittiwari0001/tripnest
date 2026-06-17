@@ -137,7 +137,7 @@ export default function SmartExplore() {
         <div className="grid md:grid-cols-3 gap-8">
 
           {data.places.map(
-            (place: Place) => (
+            (place: CatalogPlace) => (
 
               <div
                 key={place._id}

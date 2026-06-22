@@ -293,23 +293,31 @@ src
 
 ## Landing Page
 
-![Landing Page](./public/landing%20page.png)
+![Landing Page](./touriest/public/landing%20page.png)
+
+---
+
+## Interactive Map
+
+![Interactive Map](./touriest/public/map%20page.png)
+
+---
 
 ## Dashboard
 
-![Dashboard](./public/dashboard%20page.png)
+![Dashboard](./touriest/public/dashboard%20page.png)
+
+---
 
 ## Hotel Details
 
-![Hotel Details](./public/hoteldetails%20page.png)
+![Hotel Details](./touriest/public/hoteldetails%20page.png)
 
-## Booking Details
+---
 
-![Booking Details](./public/bookingdetails%20page.png)
+## Booking History
 
-## Map
-
-![Map](./public/map%20page.png)
+![Booking History](./touriest/public/bookingdetails%20page.png)
 
 # 🚀 Current Development Status
 

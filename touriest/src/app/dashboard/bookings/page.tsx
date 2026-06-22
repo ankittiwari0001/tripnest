@@ -31,37 +31,48 @@ export default function BookingsPage() {
     Booking[]
   >([]);
 
-  useEffect(() => {
+useEffect(() => {
+  async function fetchBookings() {
 
-    async function fetchBookings() {
+    const token =
+      localStorage.getItem("token");
 
-      const token =
-        localStorage.getItem(
-          "token"
-        );
+    console.log(
+      "TOKEN:",
+      token
+    );
 
-      const res =
-        await fetch(
-          "/api/bookings",
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          }
-        );
-
-      const data =
-        await res.json();
-
-      setBookings(
-        data.bookings
+    const res =
+      await fetch(
+        "/api/bookings",
+        {
+          headers: {
+            Authorization:
+              `Bearer ${token}`,
+          },
+        }
       );
-    }
 
-    fetchBookings();
+    console.log(
+      "STATUS:",
+      res.status
+    );
 
-  }, []);
+    const data =
+      await res.json();
+
+    console.log(
+      "BOOKINGS RESPONSE:",
+      data
+    );
+
+    setBookings(
+      data.bookings || []
+    );
+  }
+
+  fetchBookings();
+}, []);
 
   return (
     <main className="max-w-7xl mx-auto px-6 py-20">

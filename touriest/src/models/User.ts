@@ -10,6 +10,8 @@ export type UserRole =
   | "ADMIN"
   | "SUPER_ADMIN";
 
+
+
 export interface IUser extends Document {
 
   name: string;
@@ -25,6 +27,7 @@ export interface IUser extends Document {
   phone?: string;
 
   wishlist: mongoose.Types.ObjectId[];
+
 
   createdAt: Date;
 
@@ -73,14 +76,13 @@ const UserSchema = new Schema<IUser>(
       default: "",
     },
 
-    wishlist: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Hotel",
-      },
-    ],
+   wishlist: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Hotel",
   },
-
+],
+},
   {
     timestamps: true,
   }

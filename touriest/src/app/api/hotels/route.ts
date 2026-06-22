@@ -70,7 +70,7 @@ export async function POST(
         ...body,
 
         createdBy:
-          decoded.userId,
+          decoded.id,
       });
 
     return NextResponse.json(

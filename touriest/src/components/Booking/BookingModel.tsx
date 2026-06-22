@@ -3,6 +3,7 @@
 import {
   useState,
 } from "react";
+import { useRouter } from "next/navigation";
 
 import toast from "react-hot-toast";
 
@@ -33,12 +34,24 @@ export default function BookingModal({
 
   const [loading, setLoading] =
     useState(false);
+  const router = useRouter();
 
   async function handleBooking() {
 
     try {
 
       setLoading(true);
+
+      if (
+        !checkIn ||
+        !checkOut
+      ) {
+        toast.error(
+          "Select dates first"
+        );
+
+        return;
+      }
 
       const token =
         localStorage.getItem(
@@ -94,6 +107,8 @@ export default function BookingModal({
       );
 
       onClose();
+
+      router.push("/dashboard/bookings");
 
     } catch (error) {
 

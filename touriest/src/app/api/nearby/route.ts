@@ -331,19 +331,21 @@ export async function GET(
       request.url
     );
 
-    const lat =
-      Number(
-        searchParams.get(
-          "lat"
-        )
+    const latParam =
+      searchParams.get(
+        "lat"
       );
 
-    const lng =
-      Number(
-        searchParams.get(
-          "lng"
-        )
+    const lngParam =
+      searchParams.get(
+        "lng"
       );
+
+    const lat =
+      Number(latParam);
+
+    const lng =
+      Number(lngParam);
 
     const type =
       searchParams.get(
@@ -353,8 +355,10 @@ export async function GET(
     /* VALIDATION */
 
     if (
-      !lat ||
-      !lng
+      latParam === null ||
+      lngParam === null ||
+      Number.isNaN(lat) ||
+      Number.isNaN(lng)
     ) {
 
       return NextResponse.json(

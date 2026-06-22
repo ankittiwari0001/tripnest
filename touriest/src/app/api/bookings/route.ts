@@ -27,6 +27,11 @@ export async function POST(
           ""
         );
 
+    console.log(
+      "AUTH HEADER:",
+      req.headers.get("authorization")
+    );
+
     if (!token) {
 
       return NextResponse.json(
@@ -94,26 +99,72 @@ export async function POST(
 
     /* TOTAL PRICE */
 
-    const totalPrice =
-      hotel.price * guests;
+    /* DATE VALIDATION */
+
+const checkInDate =
+  new Date(checkIn);
+
+const checkOutDate =
+  new Date(checkOut);
+
+if (
+  checkOutDate <=
+  checkInDate
+) {
+  return NextResponse.json(
+    {
+      success: false,
+      message:
+        "Check-out date must be after check-in date",
+    },
+    {
+      status: 400,
+    }
+  );
+}
+
+/* TOTAL NIGHTS */
+
+const oneDay =
+  1000 * 60 * 60 * 24;
+
+const totalNights =
+  Math.ceil(
+    (
+      checkOutDate.getTime() -
+      checkInDate.getTime()
+    ) / oneDay
+  );
+
+/* TOTAL PRICE */
+
+const totalPrice =
+  hotel.price *
+  totalNights;
 
     /* CREATE BOOKING */
 
-    const booking =
-      await Booking.create({
-        userId:
-          decoded.userId,
+  const booking =
+  await Booking.create({
+    userId:
+      decoded.id,
 
-        hotelId,
+    hotelId,
 
-        checkIn,
+    checkIn,
 
-        checkOut,
+    checkOut,
 
-        guests,
+    guests,
 
-        totalPrice,
-      });
+    totalPrice,
+
+    bookingStatus:
+      "Confirmed",
+
+    paymentStatus:
+      "Pending",
+  });
 
     return NextResponse.json(
       {
@@ -204,21 +255,28 @@ export async function GET(
     const bookings =
       await Booking.find({
         userId:
-          decoded.userId,
+          decoded.id,
       })
         .populate("hotelId")
         .sort({
           createdAt: -1,
         });
 
-    return NextResponse.json({
+    return NextResponse.json(
+      {
+        success: true,
 
-      success: true,
+        message:
+          "Bookings fetched successfully",
 
-      bookings,
-    });
+        bookings,
+      },
+      {
+        status: 200,
+      }
+    );
 
-  } catch (error) {
+  } catch {
 
     return NextResponse.json(
       {

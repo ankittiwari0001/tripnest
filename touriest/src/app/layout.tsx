@@ -5,6 +5,8 @@ import Navbar from "@/components/layout/Navbar";
 import {
   Toaster,
 } from "sonner";
+import AuthProvider
+from "@/components/auth/AuthProvider";
 
 
 export default function RootLayout({
@@ -16,29 +18,30 @@ export default function RootLayout({
   return (
     <html lang="en">
 
-      <body className="bg-gray-50">
+     <body className="bg-gray-50">
 
-        {/* NAVBAR */}
-        <Navbar />
+  <AuthProvider>
 
-        {/* PAGE CONTENT */}
-        {children}
+    <Navbar />
 
-        {/* TOAST (sonner) */}
-   <Toaster
-       position="top-right"
-       richColors
-       expand
-       closeButton
+    {children}
+
+    <Toaster
+      position="top-right"
+      richColors
+      expand
+      closeButton
       toastOptions={{
-      style: {
-        zIndex: 999999,
-        marginTop: "90px",
-      },
-    }}
-  />
+        style: {
+          zIndex: 999999,
+          marginTop: "90px",
+        },
+      }}
+    />
 
-      </body>
+  </AuthProvider>
+
+</body>
 
     </html>
   );

@@ -51,25 +51,26 @@ export default function DynamicMap() {
     setSelectedType,
   ] = useState("all");
 
-  const [
-    selectedPlace,
-    setSelectedPlace,
-  ] = useState<ExtendedPlace | null>(
+  const DEFAULT_LOCATION = {
+    lat: 15.2993,
+    lng: 74.1240,
+  };
+
+  const [selectedPlace, setSelectedPlace] = useState<ExtendedPlace | null>(
     null
   );
 
-  const [
-    userLocation,
-    setUserLocation,
-  ] = useState({
-    lat: 23.2599,
-    lng: 77.4126,
-  });
+  const [userLocation, setUserLocation] = useState(
+    DEFAULT_LOCATION
+  );
 
-  const initialUserLocation = useRef(userLocation);
+  const initialUserLocation = useRef(DEFAULT_LOCATION);
 
   const [savedOpen, setSavedOpen] =
   useState(false);
+
+const [locationError, setLocationError] =
+  useState<string | null>(null);
 
   /* SAVED PLACES */
 
@@ -123,39 +124,45 @@ export default function DynamicMap() {
 
   /* USER LOCATION */
 
-  useEffect(() => {
+useEffect(() => {
+  if (typeof navigator === "undefined") {
+    return;
+  }
 
-    if (
-      navigator.geolocation
-    ) {
-
-      navigator.geolocation.getCurrentPosition(
-
-        (position) => {
-
-          setUserLocation({
-
-            lat:
-              position.coords
-                .latitude,
-
-            lng:
-              position.coords
-                .longitude,
-          });
-        },
-
-        (error) => {
-
-          console.error(
-            "Location error:",
-            error
-          );
-        }
+  if (!navigator.geolocation) {
+    window.setTimeout(() => {
+      setLocationError(
+        "Geolocation is not available in your browser."
       );
-    }
+    }, 0);
+    return;
+  }
 
-  }, []);
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const nextLocation = {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+      };
+
+      setUserLocation(nextLocation);
+      initialUserLocation.current = nextLocation;
+      setLocationError(null);
+    },
+    (error) => {
+      console.error("Location error:", error);
+
+      setLocationError(
+        error.message ||
+          "Unable to access your location."
+      );
+    },
+    {
+      timeout: 10000,
+      maximumAge: 300000,
+    }
+  );
+}, []);
 
   /* INIT MAP */
 
@@ -172,11 +179,15 @@ export default function DynamicMap() {
         return;
       }
 
-     const L =
+ const leafletModule =
   await import("leaflet");
 
+const L =
+  leafletModule.default ??
+  leafletModule;
 
-      if (!isMounted) {
+
+    if (!isMounted) {
         return;
       }
 
@@ -193,20 +204,14 @@ export default function DynamicMap() {
 
       
 
-      if (
-        (
-          container as HTMLElement & {
-            _leaflet_id?: number;
-          }
-        )._leaflet_id
-      ) {
+    const leafletContainer =
+  container as HTMLElement & {
+    _leaflet_id?: number;
+  };
 
-        (
-          container as HTMLElement & {
-            _leaflet_id?: number;
-          }
-        )._leaflet_id = undefined;
-      }
+if (leafletContainer._leaflet_id) {
+  delete leafletContainer._leaflet_id;
+}
 
       /* CREATE MAP WITH CURRENT LOCATION */
 
@@ -574,11 +579,21 @@ export default function DynamicMap() {
         onRemove={toggleSavePlace}
       />
 
-       {loading && (
+      {locationError && (
+        <div className="absolute top-28 left-6 z-[1000] max-w-md rounded-3xl bg-red-500/95 p-4 text-white shadow-xl">
+          <strong className="block font-semibold">
+            Location unavailable
+          </strong>
+          <p className="mt-2 text-sm leading-6">
+            {locationError}
+          </p>
+        </div>
+      )}
 
-   <MapLoading />
-       
-       )}
+      {loading && (
+
+        <MapLoading />
+      )}
 
       {error && (
 

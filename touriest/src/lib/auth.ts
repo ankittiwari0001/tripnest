@@ -5,19 +5,19 @@ const JWT_SECRET =
 
 export interface JwtPayload {
 
-  userId: string;
+  id: string;
 
   role: string;
 }
 
 export function generateToken(
-  userId: string,
+  id: string,
   role: string
 ) {
 
   return jwt.sign(
     {
-      userId,
+      id,
       role,
     },
 
@@ -40,7 +40,7 @@ export function verifyToken(
       JWT_SECRET
     ) as JwtPayload;
 
-  } catch (error) {
+  } catch {
 
     return null;
 

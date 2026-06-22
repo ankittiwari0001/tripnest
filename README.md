@@ -1,84 +1,183 @@
-               # 🌍 Touriest AI
+# 🌍 TripNest — AI Powered Smart Tourism Platform
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black)
+![TypeScript](https://img.shields.io/badge/TypeScript-5-blue)
+![MongoDB](https://img.shields.io/badge/MongoDB-green)
+![Tailwind CSS](https://img.shields.io/badge/TailwindCSS-3-38BDF8)
+![License](https://img.shields.io/badge/License-MIT-yellow)
 
 ## 🚀 Overview
 
-Touriest AI is an AI-powered tourism discovery platform designed to help travelers discover nearby attractions, hotels, restaurants, cafes, and local experiences in real time.
+TripNest is a modern AI-powered tourism platform that helps travelers discover destinations, explore nearby attractions, find hotels, save favorite places, and manage bookings from a centralized travel dashboard.
 
-Built with modern technologies like Next.js, TypeScript, Leaflet, OpenStreetMap, and Framer Motion, Touriest AI focuses on delivering a fast, scalable, and user-friendly travel discovery experience.
+Unlike traditional tourism applications that focus only on maps or listings, TripNest combines location discovery, hotel exploration, booking management, and AI-ready travel planning into a single ecosystem.
 
----
-
-# 🎯 Product Vision
-
-Touriest AI is not just a tourism map application.
-
-The long-term vision is to build a complete AI-powered travel ecosystem where users can:
-
-* Discover nearby attractions
-* Find hotels and restaurants
-* Save favorite places
-* Get personalized travel recommendations
-* Plan trips with AI assistance
-* Overcome language barriers while traveling
-* Book hotels, restaurants, and cabs
-
-The goal is to create a real-world travel product rather than a traditional college project.
+The project is built with scalability, modular architecture, and real-world product development principles in mind.
 
 ---
 
-## 📸 Screenshots
+# 🎯 Problem Statement
 
-### Interactive Map
+Travelers often rely on multiple applications for:
 
-![Map Experience](touriest/public/map1.png)
+- Discovering tourist attractions
+- Finding hotels
+- Managing saved destinations
+- Tracking bookings
+- Planning trips
 
-### Nearby Discovery
+This fragmented experience creates unnecessary friction.
 
-![Nearby Places](touriest/public/map2.png)
+TripNest solves this by providing a unified travel platform where users can discover, save, plan, and manage travel experiences from one place.
 
 ---
 
-# ✨ Features
+# 💡 Solution
 
-## 🗺️ Smart Place Discovery
+TripNest provides:
 
-* Interactive Leaflet Map
-* OpenStreetMap Integration
-* Nearby Places Discovery
-* Dynamic Marker Rendering
-* Marker Clustering
-* Location-Based Exploration
+✅ Smart location discovery
 
-## 🔍 Search & Filters
+✅ Interactive map experience
 
-* Real-Time Search
-* Hotels Filter
-* Restaurants Filter
-* Attractions Filter
-* Optimized Search Experience
+✅ Hotel exploration system
+
+✅ Hotel booking workflow
+
+✅ Saved places collection
+
+✅ Personalized dashboard
+
+✅ Secure authentication system
+
+✅ AI-ready travel planning foundation
+
+---
+
+# ✨ Key Features
+
+## 🗺️ Smart Travel Discovery
+
+- Interactive OpenStreetMap Integration
+- Dynamic Marker Rendering
+- Nearby Places Discovery
+- Location-Based Exploration
+- Responsive Map Experience
+- Real-Time Search
+
+---
+
+## 🏨 Hotel Ecosystem
+
+### Hotel Listing
+
+- Browse available hotels
+- Category-based exploration
+- Ratings and pricing overview
+
+### Hotel Details
+
+- Hotel overview
+- Amenities
+- Reviews section
+- Similar hotel recommendations
+
+### Hotel Booking
+
+- Secure booking workflow
+- Date selection
+- Guest management
+- Booking confirmation
+- MongoDB persistence
+
+---
 
 ## ❤️ Saved Places
 
-* Save / Unsave Locations
-* LocalStorage Persistence
-* Travel Collection Foundation
+Users can:
+
+- Save destinations
+- Remove saved destinations
+- Build travel collections
+- Access saved locations from dashboard
+
+Implemented using:
+
+- Zustand
+- LocalStorage Persistence
+
+---
+
+## 📅 Booking Management
+
+- Create bookings
+- Booking history
+- Booking status tracking
+- User-specific booking retrieval
+
+---
+
+## 🔐 Authentication & Security
+
+### User Authentication
+
+- Registration
+- Login
+- Protected Routes
+
+### Security
+
+- JWT Authentication
+- Route Protection
+- User-specific data access
+- Secure API architecture
+
+---
+
+## 📊 Personalized Dashboard
+
+User dashboard provides:
+
+- Saved Places Overview
+- Travel Statistics
+- Booking Management
+- Account Information
+- Travel Activity Tracking
+
+---
 
 ## 🎨 Modern User Experience
 
-* Responsive Design
-* Skeleton Loading
-* Empty States
-* Error Handling
-* Animated Place Drawer
-* Framer Motion Integration
+- Responsive Design
+- Mobile First Layout
+- Skeleton Loading
+- Error States
+- Empty States
+- Framer Motion Animations
+- Premium UI Components
 
-## ⚡ Performance Optimizations
+---
 
-* Optimized Custom Hooks
-* Reduced API Requests
-* Local Search Filtering
-* Modular Architecture
-* Better Rendering Performance
+# 🏗️ System Architecture
+
+```text
+┌──────────────────────┐
+│      Frontend        │
+│  Next.js + React     │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│     API Routes       │
+│   Next.js Backend    │
+└──────────┬───────────┘
+           │
+           ▼
+┌──────────────────────┐
+│      MongoDB         │
+│   Data Persistence   │
+└──────────────────────┘
+```
 
 ---
 
@@ -86,297 +185,190 @@ The goal is to create a real-world travel product rather than a traditional coll
 
 ## Frontend
 
-* Next.js 15
-* React
-* TypeScript
-* Tailwind CSS
+- Next.js 15
+- React
+- TypeScript
+- Tailwind CSS
+- Framer Motion
+
+## Backend
+
+- Next.js Route Handlers
+- REST APIs
+- JWT Authentication
+
+## Database
+
+- MongoDB
+- Mongoose ODM
+
+## State Management
+
+- Zustand
 
 ## Mapping
 
-* Leaflet.js
-* OpenStreetMap
-* Leaflet Marker Cluster
-
-## Animation
-
-* Framer Motion
+- Leaflet.js
+- OpenStreetMap
 
 ## Icons
 
-* Lucide React
-
-## Storage
-
-* LocalStorage
+- Lucide React
 
 ---
 
-# 🏗️ Project Architecture
+# 📂 Project Structure
 
-Touriest AI follows a scalable and modular architecture designed for long-term product development.
-
-## 📂 Project Structure
-
-```txt
-src/
+```bash
+src
 │
-├── app/
-│   ├── api/
-│   │   └── nearby/
-│   │       └── route.ts
+├── app
+│   ├── api
+│   │   ├── auth
+│   │   ├── bookings
+│   │   ├── hotels
+│   │   ├── saved
+│   │   └── nearby
 │   │
-│   ├── globals.css
-│   ├── layout.tsx
-│   ├── page.tsx
-│   └── map/
-│       └── page.tsx
+│   ├── dashboard
+│   ├── hotels
+│   ├── saved
+│   ├── auth
+│   └── page.tsx
 │
-├── components/
-│   ├── map/
-│   ├── drawer/
-│   ├── layout/
-│   └── ui/
+├── components
+│   ├── dashboard
+│   ├── hotels
+│   ├── booking
+│   ├── map
+│   ├── ui
+│   └── layout
 │
-├── hooks/
-│
-├── services/
-│
-├── utils/
-│
-├── types/
-│
-├── data/
-│
-├── lib/
-│
-└── styles/
+├── hooks
+├── lib
+├── models
+├── services
+├── store
+├── types
+└── utils
 ```
 
 ---
 
-# 📖 Architecture Explained
+# ⚡ Engineering Highlights
 
-## 📁 app/
+### Scalable Architecture
 
-Contains all application routes, layouts, pages, and API endpoints built using the Next.js App Router.
+- Modular component structure
+- Reusable business logic
+- Separation of concerns
 
-### Responsibilities
+### Authentication Layer
 
-* Routing
-* Layout Management
-* Global Styling
-* API Endpoints
+- JWT token generation
+- Token validation
+- Protected API routes
 
----
+### Data Management
 
-## 📁 app/api/
+- MongoDB schema modeling
+- User-specific queries
+- Booking persistence
 
-Backend API endpoints used by the application.
+### Performance Optimizations
 
-### nearby/route.ts
+- Client-side filtering
+- Reusable hooks
+- Optimized rendering patterns
 
-Responsible for:
+### Developer Experience
 
-* Fetching nearby places
-* Processing location data
-* Returning place information to the frontend
-
----
-
-## 📁 components/
-
-Reusable UI and business components used throughout the application.
-
-### map/
-
-Contains all map-related components:
-
-* DynamicMap
-* MapSearch
-* MapFilters
-* SavedPlacesPanel
-* PlaceDrawer
-* MapLoading
-* MapError
-* MapEmpty
-
-### drawer/
-
-Modular components used inside PlaceDrawer.
-
-Examples:
-
-* DrawerHero
-* DrawerTags
-* DrawerSummary
-* DrawerActions
-* DrawerFooter
-
-### layout/
-
-Shared layout components.
-
-Examples:
-
-* Navbar
-* Sidebar
-* Footer
-
-### ui/
-
-Reusable design system components.
-
-Examples:
-
-* Button
-* Input
-* Modal
-* Card
-* Loader
+- TypeScript Type Safety
+- Reusable Components
+- Clean Folder Architecture
 
 ---
 
-## 📁 hooks/
+# 📸 Product Screenshots
 
-Custom React hooks that encapsulate reusable business logic.
+## Landing Page
 
-### useMapPlaces
-
-Handles:
-
-* Nearby places fetching
-* Search filtering
-* Loading state
-* Error handling
-
-### useSavedPlaces
-
-Handles:
-
-* Save places
-* Remove places
-* LocalStorage persistence
-
-### useLeafletMarkers
-
-Handles:
-
-* Marker creation
-* Marker clustering
-* Map bounds management
-
-### useUserLocation
-
-Handles:
-
-* User geolocation
-* Location updates
+![Landing Page](public/landing%20page.png)
 
 ---
 
-## 📁 services/
+## Interactive Map
 
-Application services responsible for data processing and external integrations.
-
-Future examples:
-
-* Places Service
-* AI Service
-* Booking Service
+![Map](public/map%20page.png)
 
 ---
 
-## 📁 utils/
+## Dashboard
 
-Utility functions and helper methods.
-
-Examples:
-
-* Marker generation
-* Constants
-* Formatters
-* Shared helper functions
+![Dashboard](public/dashboard%20page.png)
 
 ---
 
-## 📁 types/
+## Hotel Details
 
-Centralized TypeScript interfaces and types.
-
-Benefits:
-
-* Better maintainability
-* Improved type safety
-* Cleaner development experience
+![Hotel Details](public/hoteldetails%20page.png)
 
 ---
 
-## 📁 data/
+## Booking History
 
-Static application data.
-
-Examples:
-
-* Categories
-* Fallback Places
-* Mock Data
+![Booking Details](public/bookingdetails%20page.png)
 
 ---
 
-## 📁 lib/
+# 🚀 Current Development Status
 
-Shared libraries and infrastructure.
+## ✅ Completed
 
-Future examples:
-
-* Database Configuration
-* API Clients
-* Storage Utilities
-
----
-
-## 📁 styles/
-
-Global and third-party styles.
-
-Examples:
-
-* Leaflet custom styles
-* Shared styling utilities
+- Authentication System
+- JWT Security
+- Interactive Maps
+- Nearby Places Discovery
+- Saved Places
+- Hotel Listing
+- Hotel Details
+- Hotel Booking
+- Booking History
+- Dashboard
+- Responsive UI
 
 ---
 
-# 🚀 Getting Started
+## 🔄 In Progress
 
-## 1. Clone Repository
+- Dashboard Enhancements
+- Restaurant Module
+- Travel Analytics
+- AI Integration
 
-```bash
-git clone https://github.com/ankittiwari0001/tripnest.git
-```
+---
 
-## 2. Navigate to Project
+## 🚀 Planned
 
-```bash
-cd tripnest
-```
+### AI Travel Assistant
 
-## 3. Install Dependencies
+Generate personalized travel recommendations.
 
-```bash
-npm install
-```
+### Smart Trip Planner
 
-## 4. Run Development Server
+Create multi-day itineraries.
 
-```bash
-npm run dev
-```
+### Restaurant Ecosystem
 
-## 5. Open Browser
+Restaurant discovery and reservations.
 
-```txt
-http://localhost:3000
-```
+### Payment Gateway
+
+Razorpay Integration.
+
+### Multi-Language Support
+
+Travel assistance across regions.
 
 ---
 
@@ -385,76 +377,40 @@ http://localhost:3000
 Create a `.env.local` file:
 
 ```env
-NEXT_PUBLIC_APP_NAME=Touriest AI
+MONGODB_URI=your_mongodb_uri
+
+JWT_SECRET=your_secret_key
+
+NEXT_PUBLIC_APP_NAME=TripNest
 ```
 
 ---
 
-# 📈 Current Development Status
+# 🚀 Getting Started
 
-## ✅ Completed
+## Clone Repository
 
-* Interactive Map Experience
-* Nearby Places API
-* Marker Rendering
-* Marker Clustering
-* Search Optimization
-* Saved Places System
-* Place Drawer
-* Responsive UI
-* Skeleton Loading
-* Empty & Error States
-* Framer Motion Animations
+```bash
+git clone https://github.com/ankittiwari0001/tripnest.git
+```
 
-## 🔄 In Progress
+## Install Dependencies
 
-* Product Branding
-* QA Testing
-* Landing Experience
+```bash
+npm install
+```
 
-## 🚀 Planned
+## Run Development Server
 
-* Hotels Experience
-* Restaurants Experience
-* Attractions Experience
-* Authentication
-* Database Integration
-* AI Assistant
-* Booking Ecosystem
+```bash
+npm run dev
+```
 
----
+Open:
 
-# 🚀 Future Roadmap
-
-## Phase 2 — Product Identity
-
-* Landing Page
-* Branding System
-* Product Showcase
-
-## Phase 3 — Discovery Expansion
-
-* Dedicated Hotels Experience
-* Dedicated Restaurants Experience
-* Attractions Experience
-
-## Phase 4 — User System
-
-* Authentication
-* User Profiles
-* Saved Collections
-
-## Phase 5 — AI Features
-
-* AI Travel Assistant
-* Smart Trip Planner
-* Language Assistance
-
-## Phase 6 — Travel Ecosystem
-
-* Hotel Booking
-* Restaurant Booking
-* Cab Booking
+```text
+http://localhost:3000
+```
 
 ---
 
@@ -462,34 +418,59 @@ NEXT_PUBLIC_APP_NAME=Touriest AI
 
 Recommended Platform:
 
-* Vercel
+- Vercel
 
-Production Checklist:
+Deployment Checklist:
 
-* Environment Variables
-* Error Monitoring
-* Analytics
-* SEO Optimization
-* Performance Audits
-
----
-
-# 🤝 Contributing
-
-Contributions, ideas, and feedback are welcome.
-
-Feel free to fork the repository and submit pull requests.
+- Environment Variables
+- MongoDB Configuration
+- JWT Secret Setup
+- SEO Optimization
+- Performance Audit
 
 ---
 
 # 👨‍💻 Author
 
-**Ankit Tiwari**
+### Ankit Tiwari
 
-Building Touriest AI — an AI-powered travel discovery platform.
+Full Stack Developer
+
+Building scalable web applications using:
+
+- Next.js
+- TypeScript
+- MongoDB
+- React
+- Modern Web Technologies
+
+GitHub:
+
+https://github.com/ankittiwari0001
 
 ---
 
 # ⭐ Support
 
-If you found this project helpful, consider giving it a star on GitHub.
+If you found this project valuable:
+
+⭐ Star the repository
+
+🍴 Fork the project
+
+🚀 Share feedback and suggestions
+
+---
+
+## Future Vision
+
+TripNest aims to evolve into a complete AI-powered travel ecosystem where users can:
+
+- Discover destinations
+- Plan trips with AI
+- Book hotels
+- Reserve restaurants
+- Manage itineraries
+- Access personalized travel insights
+
+All from a single platform.

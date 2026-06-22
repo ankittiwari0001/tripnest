@@ -293,33 +293,23 @@ src
 
 ## Landing Page
 
-![Landing Page](public/landing%20page.png)
-
----
-
-## Interactive Map
-
-![Map](public/map%20page.png)
-
----
+![Landing Page](./public/landing%20page.png)
 
 ## Dashboard
 
-![Dashboard](public/dashboard%20page.png)
-
----
+![Dashboard](./public/dashboard%20page.png)
 
 ## Hotel Details
 
-![Hotel Details](public/hoteldetails%20page.png)
+![Hotel Details](./public/hoteldetails%20page.png)
 
----
+## Booking Details
 
-## Booking History
+![Booking Details](./public/bookingdetails%20page.png)
 
-![Booking Details](public/bookingdetails%20page.png)
+## Map
 
----
+![Map](./public/map%20page.png)
 
 # 🚀 Current Development Status
 
